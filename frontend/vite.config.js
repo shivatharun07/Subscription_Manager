@@ -1,23 +1,31 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+// frontend/vite.config.js
+import { defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react';
 
-// https://vite.dev/config/
-export default defineConfig(({ command }) => ({
-  plugins: [react()],
-  base: '/',
-  server: {
-    port: 3000,
-    proxy: {
-      '/api/v1': {
-        target: command === 'serve' ? 'http://localhost:5000' : '/api',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/v1/, '')
+export default defineConfig(({ command, mode }) => {
+  // Load env file based on `mode` in the current working directory
+  const env = loadEnv(mode, process.cwd(), 'VITE_');
+  
+  return {
+    plugins: [react()],
+    base: '/',
+    define: {
+      'process.env': env
+    },
+    server: {
+      port: 3000,
+      proxy: {
+        '/api': {
+          target: env.VITE_API_URL || 'http://localhost:5000',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, '')
+        }
       }
+    },
+    build: {
+      outDir: 'dist',
+      assetsDir: 'assets',
+      sourcemap: true
     }
-  },
-  build: {
-    outDir: 'dist',
-    assetsDir: 'assets',
-    sourcemap: true
-  }
-}))
+  };
+});
