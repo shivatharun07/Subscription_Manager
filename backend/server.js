@@ -28,14 +28,18 @@ const allowedOrigins = isProduction ? [
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow all origins in development
-    if (!isProduction) return callback(null, true);
+    // Allow all origins in development or if origin is not defined (e.g., server-to-server requests)
+    if (!isProduction || !origin) return callback(null, true);
     
     // In production, check against allowed origins
-    if (allowedOrigins.some(allowedOrigin => 
-      origin === allowedOrigin || 
-      (allowedOrigin.includes('*') && origin.endsWith(allowedOrigin.split('*')[1]))
-    )) {
+    if (allowedOrigins.some(allowedOrigin => {
+      if (origin === allowedOrigin) return true;
+      if (allowedOrigin.includes('*')) {
+        const suffix = allowedOrigin.split('*')[1];
+        return origin.endsWith(suffix);
+      }
+      return false;
+    })) {
       return callback(null, true);
     }
     
