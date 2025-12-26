@@ -4,8 +4,9 @@
   "description": "Backend API for Subscription Manager application",
   "main": "server.js",
   "scripts": {
-    "start": "node server",
-    "dev": "nodemon server",
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "npm install --omit=dev",
     "db:clear-users": "node dbUtils.js clear-users",
     "db:clear-subscriptions": "node dbUtils.js clear-subscriptions",
     "db:clear-all": "node dbUtils.js clear-all",
@@ -33,5 +34,8 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.11"
+  },
+  "engines": {
+    "node": "18.17.1"
   }
 }
