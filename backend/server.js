@@ -15,27 +15,33 @@ const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
 // CORS Configuration
-const allowedOrigins = [
+const isProduction = process.env.NODE_ENV === 'production';
+const allowedOrigins = isProduction ? [
+  'https://subscription-manager-g8qwqfdo7-shiva1925s-projects.vercel.app',
+  'https://subscription-manager-*.vercel.app'
+] : [
   'http://localhost:3000',
   'http://localhost:3001',
   'http://localhost:5000',
-  'http://localhost:5173',
-  'https://subscription-manager-g8qwqfdo7-shiva1925s-projects.vercel.app',
-  'https://subscription-manager-*.vercel.app',
-  'https://subscription-manager-g8qwqfdo7-shiva1925s-projects.vercel.app'
+  'http://localhost:5173'
 ];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
+    // Allow all origins in development
+    if (!isProduction) return callback(null, true);
     
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = `The CORS policy for this site does not allow access from the specified origin: ${origin}`;
-      console.warn(msg);
-      return callback(new Error(msg), false);
+    // In production, check against allowed origins
+    if (allowedOrigins.some(allowedOrigin => 
+      origin === allowedOrigin || 
+      (allowedOrigin.includes('*') && origin.endsWith(allowedOrigin.split('*')[1]))
+    )) {
+      return callback(null, true);
     }
-    return callback(null, true);
+    
+    const msg = `The CORS policy for this site does not allow access from the specified origin: ${origin}`;
+    console.warn(msg);
+    return callback(new Error(msg), false);
   },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
