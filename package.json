@@ -1,0 +1,15 @@
+{
+  "name": "subscription-manager",
+  "version": "1.0.0",
+  "description": "A full-stack subscription management application",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm run vite-dev",
+    "start": "cd backend && npm start",
+    "build": "cd frontend && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+}
