@@ -1,7 +1,12 @@
 import axios from 'axios';
 
-// Use environment variable with fallback to localhost for development
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1';
+// Use environment variable with fallback to Render backend for production
+const API_URL = import.meta.env.VITE_API_URL ||
+  (import.meta.env.MODE === 'production'
+    ? 'https://subscription-manager-3u8t.onrender.com/api/v1'
+    : 'http://localhost:5000/api/v1');
+
+console.log('API URL:', API_URL); // Debug log
 
 // Create axios instance with base URL
 const api = axios.create({

@@ -9,6 +9,14 @@
       }
     }
   ],
+  "env": {
+    "VITE_API_URL": "https://subscription-manager-3u8t.onrender.com/api/v1"
+  },
+  "build": {
+    "env": {
+      "VITE_API_URL": "https://subscription-manager-3u8t.onrender.com/api/v1"
+    }
+  },
   "routes": [
     {
       "src": "/api/(.*)",
