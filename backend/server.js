@@ -17,7 +17,7 @@ const MONGODB_URI = process.env.MONGODB_URI;
 // CORS Configuration
 const isProduction = process.env.NODE_ENV === 'production';
 const allowedOrigins = isProduction ? [
-  'https://subscription-manager-g8qwqfdo7-shiva1925s-projects.vercel.app',
+  'https://subscription-manager-wheat-alpha.vercel.app',
   'https://subscription-manager-*.vercel.app'
 ] : [
   'http://localhost:3000',
@@ -30,7 +30,7 @@ const corsOptions = {
   origin: function (origin, callback) {
     // Allow all origins in development or if origin is not defined (e.g., server-to-server requests)
     if (!isProduction || !origin) return callback(null, true);
-    
+
     // In production, check against allowed origins
     if (allowedOrigins.some(allowedOrigin => {
       if (origin === allowedOrigin) return true;
@@ -42,7 +42,7 @@ const corsOptions = {
     })) {
       return callback(null, true);
     }
-    
+
     const msg = `The CORS policy for this site does not allow access from the specified origin: ${origin}`;
     console.warn(msg);
     return callback(new Error(msg), false);
